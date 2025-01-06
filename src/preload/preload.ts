@@ -136,7 +136,8 @@ export type DownloadsApi = typeof downloadsApi;
 contextBridge.exposeInMainWorld("downloads", downloadsApi);
 
 const miscApi = {
-    getNewsRssFeed: (): Promise<NewsFeedData> => ipcRenderer.invoke("misc:getNewsRssFeed"),
+    getNewsRssFeed: (numberOfNews: number): Promise<NewsFeedData> => ipcRenderer.invoke("misc:getNewsRssFeed", numberOfNews),
+    getDevlogRssFeed: (numberOfNews: number): Promise<NewsFeedData> => ipcRenderer.invoke("misc:getDevlogRssFeed", numberOfNews),
 };
 export type MiscApi = typeof miscApi;
 contextBridge.exposeInMainWorld("misc", miscApi);

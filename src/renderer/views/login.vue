@@ -8,6 +8,17 @@
         <div v-if="connecting" class="relative">
             <Loader></Loader>
         </div>
+
+        <Panel>
+            <div class="flex-col gap-md">
+                <div class="txt-error">😊 Smile's Crazy Ideas 😊</div>
+                <ul>
+                    <li>Overlay in-game with a second window transparent</li>
+                    <li>threejs particle system for smoke effect/sparkles and BAR themed download effect</li>
+                </ul>
+            </div>
+        </Panel>
+
         <!-- <Panel v-else-if="isConnected" class="login-forms" no-padding>
             <TabView v-model:activeIndex="activeIndex">
                 <TabPanel header="Login">
@@ -37,6 +48,7 @@ import { ref } from "vue";
 
 import Loader from "@renderer/components/common/Loader.vue";
 import { useRouter } from "vue-router";
+import Panel from "@renderer/components/common/Panel.vue";
 
 const router = useRouter();
 

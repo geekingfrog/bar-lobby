@@ -3,7 +3,7 @@ import { reactive, readonly } from "vue";
 
 export const _me = reactive({
     userId: 0,
-    isOnline: false,
+    isOnline: true,
     username: "Player",
     battleRoomState: {},
     outgoingFriendRequestUserIds: new Set<number>(),

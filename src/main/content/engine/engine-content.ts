@@ -28,7 +28,7 @@ export class EngineContentAPI extends AbstractContentAPI<EngineVersion> {
             log.info("Initializing engine content API");
             await fs.promises.mkdir(this.engineDirs, { recursive: true });
             const files = await fs.promises.readdir(this.engineDirs, { withFileTypes: true });
-            const dirs = files.filter((file) => file.isDirectory()).map((dir) => dir.name);
+            const dirs = files.filter((file) => file.isDirectory() || file.isSymbolicLink()).map((dir) => dir.name);
             log.info(`Found ${dirs.length} installed engine versions`);
             for (const dir of dirs) {
                 log.info(`-- Engine ${dir}`);

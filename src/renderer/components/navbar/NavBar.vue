@@ -174,7 +174,7 @@ const serverOffline = true;
     transition:
         transform 0.3s,
         opacity 0.3s;
-    z-index: 1;
+    z-index: 2;
     font-family: Rajdhani, sans-serif;
     &.hidden {
         opacity: 0;
@@ -251,10 +251,10 @@ const serverOffline = true;
                 -7px -3px 10px rgba(0, 0, 0, 0.5) !important;
         }
         &.active {
-            z-index: 1;
+            z-index: 2;
         }
         &:hover {
-            z-index: 2;
+            z-index: 3;
         }
     }
 }
