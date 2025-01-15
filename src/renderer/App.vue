@@ -124,20 +124,6 @@ function onIntroEnd() {
 
 async function onPreloadDone() {
     state.value = "initial-setup";
-    // TODO: should also check to see if game and maps are installed (need to fix bug where interrupted game dl reports as successful install)
-    const installedEngines = await window.engine.getInstalledVersions();
-    console.debug(installedEngines);
-    if (installedEngines.length === 0) {
-        state.value = "initial-setup";
-        return;
-    }
-    const installedGameVersions = await window.game.getInstalledVersions();
-    console.debug(installedGameVersions);
-    if (installedGameVersions.length === 0) {
-        state.value = "initial-setup";
-        return;
-    }
-    state.value = "default";
 }
 
 function onInitialSetupDone() {

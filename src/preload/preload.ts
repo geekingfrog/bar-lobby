@@ -68,6 +68,7 @@ export type AccountApi = typeof accountApi;
 contextBridge.exposeInMainWorld("account", accountApi);
 
 const engineApi = {
+    isNewVersionAvailable: (): Promise<boolean> => ipcRenderer.invoke("engine:isNewVersionAvailable"),
     downloadEngine: (version: string): Promise<void> => ipcRenderer.invoke("engine:downloadEngine", version),
     getInstalledVersions: (): Promise<EngineVersion[]> => ipcRenderer.invoke("engine:getInstalledVersions"),
     isVersionInstalled: (id: string): Promise<boolean> => ipcRenderer.invoke("engine:isVersionInstalled", id),
