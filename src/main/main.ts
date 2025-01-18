@@ -52,6 +52,14 @@ function registerBarFileProtocol() {
     protocol.handle("bar", (request) => {
         try {
             const decodedUrl = decodeURIComponent(request.url);
+
+            if (decodedUrl.startsWith("bar://auth-callback?code=")) {
+                // This is a special URL that is used to handle OAuth2 callbacks
+                const code = decodedUrl.slice("bar://auth-callback?code=".length);
+                ipcMain.emit("oauth2:code", code);
+                return;
+            }
+
             const filePath = decodedUrl.slice("bar://".length);
             // Security Check: Ensure the file is within the content folder
             const resolvedFilePath = path.resolve(filePath);

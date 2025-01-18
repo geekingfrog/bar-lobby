@@ -63,6 +63,8 @@ contextBridge.exposeInMainWorld("settings", settingsApi);
 const accountApi = {
     getAccount: (): Promise<Account> => ipcRenderer.invoke("account:get"),
     updateAccount: (data: Partial<Account>): Promise<void> => ipcRenderer.invoke("account:update", data),
+    login: (): Promise<void> => ipcRenderer.invoke("account:login"),
+    logout: (): Promise<void> => ipcRenderer.invoke("account:logout"),
 };
 export type AccountApi = typeof accountApi;
 contextBridge.exposeInMainWorld("account", accountApi);
