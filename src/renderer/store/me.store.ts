@@ -3,7 +3,7 @@ import { reactive, readonly } from "vue";
 
 export const _me = reactive({
     userId: 0,
-    isOnline: true,
+    isOnline: false,
     username: "Player",
     battleRoomState: {},
     outgoingFriendRequestUserIds: new Set<number>(),
@@ -17,4 +17,22 @@ export const _me = reactive({
     status: "offline",
 } as CurrentUser);
 
-export const me = readonly(_me);
+async function login() {
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+    _me.isOnline = true;
+}
+
+function playOffline() {
+    _me.isOnline = false;
+}
+
+function logout() {
+    _me.isOnline = false;
+}
+
+export const me = {
+    ...readonly(_me),
+    login,
+    logout,
+    playOffline,
+};

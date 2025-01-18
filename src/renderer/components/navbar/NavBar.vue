@@ -110,7 +110,7 @@ defineProps<{
 
 const router = useRouter();
 const allRoutes = router.getRoutes();
-const offlineMode = true;
+const offlineMode = !me.isOnline;
 const primaryRoutes = computed(() => {
     return allRoutes
         .filter((r) => ["/singleplayer", "/multiplayer", "/library", "/learn", "/store", "/development"].includes(r.path))
