@@ -18,7 +18,7 @@ export const _me = reactive({
 } as CurrentUser);
 
 async function login() {
-    await new Promise((resolve) => setTimeout(resolve, 10000));
+    await window.account.login();
     _me.isOnline = true;
 }
 

@@ -35,6 +35,7 @@ async function login() {
     try {
         connecting.value = true;
         await me.login();
+        await router.push("/home/overview");
     } catch {
         isErrored.value = true;
     } finally {
