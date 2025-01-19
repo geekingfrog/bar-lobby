@@ -3,7 +3,8 @@ import { FileStore } from "@main/json/file-store";
 import { accountSchema } from "@main/json/model/account";
 import { RedirectHandler } from "@main/services/oauth.service";
 import { logger } from "@main/utils/logger";
-import { createHash } from "crypto";
+import { createHash, randomInt } from "crypto";
+
 import { ipcMain, shell } from "electron";
 import path from "path";
 import { stringify } from "querystring";
@@ -33,6 +34,29 @@ function createUrlWithQuerystring(baseUrl: string, params: Record<string, string
     return `${baseUrl}?${queryString}`;
 }
 
+function generatePKCE(): [string, string] {
+    /**
+     * generates a (crypto strong) random challenge and the associated
+     * verifier for pkce. All encoding is already done
+     * See: https://datatracker.ietf.org/doc/html/rfc7636
+     * and: https://www.oauth.com/playground/authorization-code-with-pkce.html
+     */
+    const charSpace = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
+    const len = 47; // must be between 43 and 128
+
+    const buf = Buffer.alloc(len);
+
+    for (let i = 0; i < buf.length; i++) {
+        const idx = randomInt(0, charSpace.length);
+        buf.write(charSpace.charAt(idx), i);
+    }
+
+    const hash = createHash("sha256");
+    hash.update(buf);
+    const challenge = hash.digest("base64url");
+    return [buf.toString(), challenge];
+}
+
 function registerIpcHandlers() {
     ipcMain.handle("account:get", async () => {
         return getAccount();
@@ -47,7 +71,7 @@ function registerIpcHandlers() {
         const fixedAuthorizationEndpoint = authorization_endpoint.replaceAll(":8888", "");
         const fixedTokenEndpoint = token_endpoint.replaceAll(":8888", "");
 
-        const codeChallenge = "BGLMtLONQ_f6-Z6ikTk8ofWo-cWM3UUeT93LIEG33-M";
+        const [codeVerifier, codeChallenge] = generatePKCE();
 
         let handler: RedirectHandler;
         try {
@@ -65,14 +89,6 @@ function registerIpcHandlers() {
             log.info(`Received callback URL: ${callbackUrl}`);
             const code = callbackUrl.searchParams.get("code");
             log.info(`Received OAuth2 code: ${code}`);
-
-            const hash = createHash("sha256");
-            hash.update(codeChallenge);
-            const testCodeVerifier = hash.digest("hex");
-            const codeVerifier = "2ENOENOGA0USUNPROMSUD9U64P604R2LVOVDG5SEL7EIGA5SL3TC2BQN0MJVVG8S";
-
-            log.info(`Code verifier: ${codeVerifier}`);
-            log.info(`Test code verifier: ${testCodeVerifier}`);
 
             const tokenUrl = createUrlWithQuerystring(fixedTokenEndpoint, {
                 grant_type: "authorization_code",
